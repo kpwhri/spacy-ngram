@@ -4,7 +4,7 @@ build-backend = 'flit_core.buildapi'
 
 [project]
 name = 'spacy-ngram'
-version = '0.0.1'
+version = '0.0.2'
 authors = [
     { name = 'dcronkite', email = 'dcronkite+pypi@gmail.com' }
 ]

@@ -17,6 +17,12 @@ Types of changes:
 
 ## [Unreleased]
 
+## 0.0.2
+
+### Changed
+
+* `pyproject.toml` and `.gitignore` to make flit happy
+
 ## 0.0.1
 
 ### Added
