@@ -17,11 +17,19 @@ Types of changes:
 
 ## [Unreleased]
 
+## 0.0.3 - 2023-07-25
+
+### Fixed
+
+* Multiple spaces between words caused spaces to appear in ngram output.
+
+
 ## 0.0.2
 
 ### Changed
 
 * `pyproject.toml` and `.gitignore` to make flit happy
+
 
 ## 0.0.1
 
