@@ -8,6 +8,7 @@ from spacy_ngram import NgramComponent
     ('Quark soup is an interacting localized assembly of quarks and gluons.',
      ['quark', 'soup', 'interact', 'localize', 'assembly', 'quark', 'gluon']
      ),
+    ('Try two  spaces.', ['try', 'space']),
 ])
 def test_unigrams(nlp, text, exp):
     doc = nlp(text)
@@ -18,9 +19,9 @@ def test_unigrams(nlp, text, exp):
     ('Quark soup is an interacting localized assembly of quarks and gluons.',
      ['quark_soup', 'soup_interact', 'interact_localize', 'localize_assembly', 'assembly_quark', 'quark_gluon']
      ),
-    ('Short ngram.',
-     ['short_ngram']
-     ),
+    ('Short ngram.', ['short_ngram']),
+    ('Oneword.', []),
+    ('A little   spacy.', ['little_spacy']),
 ])
 def test_bigrams(nlp, text, exp):
     doc = nlp(text)

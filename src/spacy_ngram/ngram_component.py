@@ -83,7 +83,7 @@ class NgramComponent:
         if self.include_bos:
             yield '<BOS>'
         for token in sequence:
-            if token.is_stop or token.is_punct or token.is_digit:
+            if token.is_stop or token.is_punct or token.is_digit or token.is_space:
                 continue
             lemma = token.lemma_.lower()
             if lemma in self.nlp.Defaults.stop_words:
