@@ -24,6 +24,10 @@ Types of changes:
 
 * Fallback to `token.lower_` so that blank NLP pipeline will return text
 
+### Changed
+
+* Can now register by just `import spacy_ngram`
+
 ## 0.0.3 - 2023-07-25
 
 ### Fixed

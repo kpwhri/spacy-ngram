@@ -2,7 +2,8 @@ import spacy
 from spacy.tokens import Doc, Span
 import pytest
 
-from spacy_ngram import ngram_component
+# noinspection PyUnresolvedReferences
+import spacy_ngram
 
 
 def remove_extensions():

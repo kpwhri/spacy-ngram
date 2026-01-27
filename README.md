@@ -1,29 +1,13 @@
 # spacy-ngram
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
+[![PyPI Version](https://img.shields.io/pypi/v/spacy-ngram.svg)](https://pypi.org/project/spacy-ngram/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/spacy-ngram.svg)](https://pypi.org/project/spacy-ngram/)
+[![Contributors][contributors-shield]][contributors-url]
+[![Issues][issues-shield]][issues-url]
 
-
-
-<!-- PROJECT LOGO -->
-<br />
-<div>
-  <p>
-    <a href="https://github.com/kpwhri/spacy-ngram">
-      <!--img src="images/logo.png" alt="Logo"-->
-    </a>
-  </p>
-
-<h3 align="center">spacy-ngram</h3>
-
-  <p>
-    SpaCy pipeline component for adding document or sentence-level ngrams.
-  </p>
-</div>
+`spacy-ngram` is a flexible SpaCy pipeline component for adding document- or sentence-level ngrams to your NLP pipeline.
+It extracts ngrams from lemmas (default) or tokens, handling stop words, punctuation, and digits automatically.
 
 ## Table of Contents
 
@@ -32,21 +16,24 @@
     * [Prerequisites](#prerequisites)
     * [Installation](#installation)
 * [Usage](#usage)
+    * [Quick Start](#quick-start)
+    * [Custom Configuration](#custom-configuration)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
 * [Contact](#contact)
-* [Acknowledgements](#acknowledgements)
 
 ## About the Project
 
-SpaCy pipeline component for adding document or sentence-level ngrams.
+This component provides an easy way to enrich your `Doc` or `Span` objects with n-character or n-word sequences (
+ngrams). It's designed to be lightweight and highly configurable.
 
 ## Getting Started
 
 ### Prerequisites
 
 * Python 3.10+
+* SpaCy 3.5.0+
 
 ### Installation
 
@@ -56,23 +43,26 @@ SpaCy pipeline component for adding document or sentence-level ngrams.
 pip install spacy-ngram
 ```
 
-2. This will install `spacy`, but `spacy` requires a model:
-    * E.g., download: `python -m spacy download en_core_web_sm`
-    * Or, manually download and install with `pip install ...`
+2. Download a SpaCy model:
+
+```sh
+python -m spacy download en_core_web_sm
+```
 
 ## Usage
 
 ### Quick Start
 
-`spacy-ngram` allows the creation of ngrams of any size based on lemmas (or, lowercase tokens if lemma is not available). 
-These will be added at either the document- or sentence-level.
+By default, the component adds unigrams and bigrams at the document level, filtering out stop words, punctuation, and
+digits.
 
 ```python
 import spacy
-from spacy_ngram import NgramComponent
+# the component is registered automatically on import
+import spacy_ngram
 
-nlp = spacy.load('en_core_web_sm')  # or whatever model you downloaded
-nlp.add_pipe('spacy-ngram')  # default to document-level ngrams, removing stopwords
+nlp = spacy.load('en_core_web_sm')
+nlp.add_pipe('spacy-ngram')
 
 text = 'Quark soup is an interacting localized assembly of quarks and gluons.'
 doc = nlp(text)
@@ -84,47 +74,46 @@ print(doc._.ngram_2)
 # ['quark_soup', 'soup_interact', 'interact_localize', 'localize_assembly', 'assembly_quark', 'quark_gluon']
 ```
 
-### Quick Reference
+### Custom Configuration
 
-`spacy-ngram` creates new extensions under the `Doc` and/or `Span` classes, depending on the parameters (it defaults
-to `Doc`). The extension begins with the prefix `ngram_` followed by the level of ngram desired (e.g., `ngram_1`).
-
-* unigram (`1` included in `ngrams` argument): `Doc._.ngram_1`
-* bigram (`2` included in `ngrams` argument): `Doc._.ngram_2`
-
-### Pipeline Parameters
-
-The pipeline can be parametrized depending on needs. E.g., to process at the sentence-level:
+You can customize the extension name, ngram sizes, and whether to include Boundary-of-Sentence (`<BOS>`) /
+End-of-Sentence (`<EOS>`) tags.
 
 ```python
 nlp.add_pipe('spacy-ngram', config={
-    'sentence_level': True,  # initialize sentence-level ngrams
-    'doc_level': False,  # skip processing at document-level
-    'ngrams': (2, 3),  # bi- and trigram only
+    'extension_name': 'my_ngrams',
+    'ngrams': (2, 3),  # Extract bi- and trigrams
+    'sentence_level': True,  # Process each sentence individually
+    'doc_level': True,  # Also process the entire document
+    'include_bos': True,  # Include <BOS> tags
+    'include_eos': True,  # Include <EOS> tags
 })
-doc = nlp(text)
-sentence = list(doc.sents)
 
-print(sentence._.ngram_1)
-# raises AttributeError
-sentence._.ngram_2  # returns list of bigrams
-sentence._.ngram_3  # returns list of trigrams
+doc = nlp("This is a test. This is only a test.")
+
+# access document-level trigrams
+print(doc._.my_ngrams_3)
+
+# access sentence-level bigrams
+for sent in doc.sents:
+    print(sent._.my_ngrams_2)
 ```
 
-| Parameter        | Type         | Default  | Description                                    |
-|------------------|--------------|----------|------------------------------------------------|
-| `ngrams`         | `tuple[int]` | `(1, 2)` | 1 for unigram, 2 for bigram, etc.              |
-| `include_bos`    | `bool`       | `False`  | include `BOS` tags at end of sentence/document |
-| `include_eos`    | `bool`       | `False`  | include `EOS` tags at end of sentence/document |
-| `sentence_level` | `bool`       | `False`  | perform ngram-extraction at sentence-level     |
-| `doc_level`      | `bool`       | `True`   | perform ngram-extraction at document-level     |
+### Pipeline Parameters
 
+| Parameter        | Type         | Default   | Description                                    |
+|------------------|--------------|-----------|------------------------------------------------|
+| `extension_name` | `str`        | `'ngram'` | Base name for the Doc/Span extensions          |
+| `ngrams`         | `tuple[int]` | `(1, 2)`  | List of ngram sizes to extract                 |
+| `include_bos`    | `bool`       | `False`   | include `BOS` tags at end of sentence/document |
+| `include_eos`    | `bool`       | `False`   | include `EOS` tags at end of sentence/document |
+| `sentence_level` | `bool`       | `False`   | perform ngram-extraction at sentence-level     |
+| `doc_level`      | `bool`       | `True`    | perform ngram-extraction at document-level     |
 
 ## Versions
 
 Uses [SEMVER](https://semver.org/).
-
-See https://github.com/kpwhri/spacy-ngram/releases.
+See [Releases](https://github.com/kpwhri/spacy-ngram/releases).
 
 ## Roadmap
 
@@ -132,7 +121,7 @@ See the [open issues](https://github.com/kpwhri/spacy-ngram/issues) for a list o
 
 ## Contributing
 
-Any contributions you make are **greatly appreciated**.
+Contributions are welcome!
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -140,40 +129,19 @@ Any contributions you make are **greatly appreciated**.
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-
 ## License
 
-Distributed under the MIT License.
-
-See `LICENSE` or https://kpwhri.mit-license.org for more information.
-
-
-
-<!-- CONTACT -->
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
 Please use the [issue tracker](https://github.com/kpwhri/spacy-ngram/issues).
 
-
-<!-- ACKNOWLEDGEMENTS -->
-
-## Acknowledgements
-
 <!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 [contributors-shield]: https://img.shields.io/github/contributors/kpwhri/spacy-ngram.svg?style=flat-square
 
 [contributors-url]: https://github.com/kpwhri/spacy-ngram/graphs/contributors
-
-[forks-shield]: https://img.shields.io/github/forks/kpwhri/spacy-ngram.svg?style=flat-square
-
-[forks-url]: https://github.com/kpwhri/spacy-ngram/network/members
-
-[stars-shield]: https://img.shields.io/github/stars/kpwhri/spacy-ngram.svg?style=flat-square
-
-[stars-url]: https://github.com/kpwhri/spacy-ngram/stargazers
 
 [issues-shield]: https://img.shields.io/github/issues/kpwhri/spacy-ngram.svg?style=flat-square
 
@@ -182,8 +150,4 @@ Please use the [issue tracker](https://github.com/kpwhri/spacy-ngram/issues).
 [license-shield]: https://img.shields.io/github/license/kpwhri/spacy-ngram.svg?style=flat-square
 
 [license-url]: https://kpwhri.mit-license.org/
-
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
-
-[linkedin-url]: https://www.linkedin.com/company/kaiserpermanentewashingtonresearch
 <!-- [product-screenshot]: images/screenshot.png -->

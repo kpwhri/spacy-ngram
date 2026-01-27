@@ -1,12 +1,12 @@
 import pytest
 
 # noinspection PyUnresolvedReferences
-from spacy_ngram import NgramComponent
+import spacy_ngram
 
 
 @pytest.mark.parametrize('text, exp', [
     ('Quark soup is an interacting localized assembly of quarks and gluons.',
-     ['quark', 'soup', 'interact', 'localize', 'assembly', 'quark', 'gluon']
+     ['quark', 'soup', 'interact', 'localized', 'assembly', 'quark', 'gluon']
      ),
     ('Try two  spaces.', ['try', 'space']),
 ])
@@ -17,7 +17,7 @@ def test_unigrams(nlp, text, exp):
 
 @pytest.mark.parametrize('text, exp', [
     ('Quark soup is an interacting localized assembly of quarks and gluons.',
-     ['quark_soup', 'soup_interact', 'interact_localize', 'localize_assembly', 'assembly_quark', 'quark_gluon']
+     ['quark_soup', 'soup_interact', 'interact_localized', 'localized_assembly', 'assembly_quark', 'quark_gluon']
      ),
     ('Short ngram.', ['short_ngram']),
     ('Oneword.', []),
@@ -30,7 +30,7 @@ def test_bigrams(nlp, text, exp):
 
 @pytest.mark.parametrize('text, exp', [
     ('Quark soup is an interacting localized assembly of quarks and gluons.',
-     ['quark_soup_interact', 'soup_interact_localize', 'interact_localize_assembly', 'localize_assembly_quark',
+     ['quark_soup_interact', 'soup_interact_localized', 'interact_localized_assembly', 'localized_assembly_quark',
       'assembly_quark_gluon']
      ),
 ])

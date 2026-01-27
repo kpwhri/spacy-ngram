@@ -1,5 +1,8 @@
 import pytest
 
+# noinspection PyUnresolvedReferences
+import spacy_ngram
+
 
 def test_no_ngrams(nlp_):
     with pytest.raises(ValueError):
@@ -20,5 +23,5 @@ def test_wrong_ngram(nlp):
 def test_blank(blank_nlp):
     doc = blank_nlp('Short text.')
     ngrams = doc._.ngram_2
-    assert len(ngrams) == 0
+    assert len(ngrams) == 1
     assert ngrams[0] == 'short_text'

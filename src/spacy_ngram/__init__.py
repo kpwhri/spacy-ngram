@@ -1,1 +1,3 @@
-from .ngram_component import NgramComponent
+from spacy_ngram.ngram_component import NgramComponent
+
+__all__ = ["NgramComponent"]

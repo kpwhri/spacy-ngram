@@ -7,30 +7,38 @@ authors = [
 license = { file = 'LICENSE'}
 description = 'SpaCy pipeline component for adding document or sentence-level ngrams.'
 dependencies = [
-    "pytest>=9.0.2",
     "spacy>=3.5.0",
 ]
 requires-python = '>=3.10'
 readme = 'README.md'
-keywords = ['nlp', 'ngrams']
+keywords = ['nlp', 'ngrams', 'spacy', 'spacy-extension']
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Science/Research',
-    'Programming Language :: Python :: 3 :: Only',
+    'Intended Audience :: Developers',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
     'Topic :: Text Processing :: Linguistic',
     'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
 ]
 
 [dependency-groups]
 dev = [
-    'pytest>=9.0.0',
+    'pytest>=8.0.0',
 ]
 
 [project.urls]
-Home = 'https://github.com/kpwhri/spacy-ngram'
+Homepage = 'https://github.com/kpwhri/spacy-ngram'
+Repository = 'https://github.com/kpwhri/spacy-ngram'
+Issues = 'https://github.com/kpwhri/spacy-ngram/issues'
+Changelog = 'https://github.com/kpwhri/spacy-ngram/blob/main/CHANGELOG.md'
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["test"]
 addopts = "-q"
 pythonpath = 'src'
 
