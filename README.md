@@ -64,7 +64,8 @@ pip install spacy-ngram
 
 ### Quick Start
 
-`spacy-ngram` allows the creation of ngrams of any size. These will be added at either the document- or sentence-level.
+`spacy-ngram` allows the creation of ngrams of any size based on lemmas (or, lowercase tokens if lemma is not available). 
+These will be added at either the document- or sentence-level.
 
 ```python
 import spacy
