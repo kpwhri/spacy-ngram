@@ -1,32 +1,40 @@
-[build-system]
-requires = ['flit_core >=3.2']
-build-backend = 'flit_core.buildapi'
-
 [project]
 name = 'spacy-ngram'
-version = '0.0.3'
+version = '1.0.0'
 authors = [
     { name = 'dcronkite', email = 'dcronkite+pypi@gmail.com' }
 ]
 license = { file = 'LICENSE'}
 description = 'SpaCy pipeline component for adding document or sentence-level ngrams.'
-dependencies = ['spacy']
+dependencies = [
+    "spacy>=3.5.0",
+]
 requires-python = '>=3.10'
 readme = 'README.md'
 keywords = ['nlp', 'ngrams']
 classifiers = [
-    'Development Status :: 4 - Beta',
+    'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Science/Research',
     'Programming Language :: Python :: 3 :: Only',
     'Topic :: Text Processing :: Linguistic',
     'License :: OSI Approved :: MIT License',
 ]
 
-[project.optional-dependencies]
-dev = ['pytest']
+[dependency-groups]
+dev = [
+    'pytest>=9.0.0',
+]
 
 [project.urls]
 Home = 'https://github.com/kpwhri/spacy-ngram'
 
-[tool.flit.module]
-name = 'spacy_ngram'
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = 'src'
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
