@@ -15,3 +15,10 @@ def test_wrong_ngram(nlp):
     doc = nlp('Short text.')
     with pytest.raises(AttributeError):
         doc._.ngram_3  # ask for non-default ngrams
+
+
+def test_blank(blank_nlp):
+    doc = blank_nlp('Short text.')
+    ngrams = doc._.ngram_2
+    assert len(ngrams) == 0
+    assert ngrams[0] == 'short_text'

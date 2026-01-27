@@ -85,10 +85,12 @@ class NgramComponent:
         for token in sequence:
             if token.is_stop or token.is_punct or token.is_digit or token.is_space:
                 continue
-            lemma = token.lemma_.lower()
-            if lemma in self.nlp.Defaults.stop_words:
+            target = token.lemma_.lower()
+            if not target:  # e.g., spacy.blank
+                target = token.lower_
+            if target in self.nlp.Defaults.stop_words:
                 continue
-            yield lemma
+            yield target
         if self.include_eos:
             yield '<EOS>'
 

@@ -2,6 +2,8 @@ import spacy
 from spacy.tokens import Doc, Span
 import pytest
 
+from spacy_ngram import ngram_component
+
 
 def remove_extensions():
     """Need to remove extensions after each fixture is run"""
@@ -15,6 +17,14 @@ def remove_extensions():
 @pytest.fixture(scope='module')
 def nlp():
     load = spacy.load('en_core_web_sm')
+    load.add_pipe('spacy-ngram')
+    yield load
+    remove_extensions()
+
+
+@pytest.fixture(scope='module')
+def blank_nlp():
+    load = spacy.blank('en')
     load.add_pipe('spacy-ngram')
     yield load
     remove_extensions()
