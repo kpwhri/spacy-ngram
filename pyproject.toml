@@ -26,6 +26,11 @@ classifiers = [
     'Operating System :: OS Independent',
 ]
 
+[project.optional-dependencies]
+dev = [
+    'pytest>=8.0.0',
+]
+
 [dependency-groups]
 dev = [
     'pytest>=8.0.0',
